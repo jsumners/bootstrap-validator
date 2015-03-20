@@ -149,11 +149,6 @@
     return deferred.promise()
   }
 
-  Validator.prototype.registerValidator = function (name, func) {
-    this.options.custom = this.options.custom || {}
-    this.options.custom[name] = func
-  }
-
   Validator.prototype.validate = function () {
     var delay = this.options.delay
 
@@ -273,8 +268,6 @@
 
 
   function Plugin(option) {
-    var args = (arguments.length > 1) ?
-      Array.prototype.slice.call(arguments, 1) : []
     return this.each(function () {
       var $this   = $(this)
       var options = $.extend({}, Validator.DEFAULTS, $this.data(), typeof option == 'object' && option)
@@ -282,10 +275,6 @@
 
       if (!data && option == 'destroy') return
       if (!data) $this.data('bs.validator', (data = new Validator(this, options)))
-      if (typeof option === 'string' && option.toLowerCase() === 'register') {
-        data.registerValidator.apply(data, args)
-        return
-      }
       if (typeof option == 'string') data[option]()
     })
   }

@@ -390,7 +390,7 @@ $(function () {
     ok(!form.find('button').is('.disabled'), 're-enabled submit button')
   })
 
-  test("should register custom validators to the custom options object", function () {
+  test("should process custom validators on the custom options object", function () {
     stop()
     var form = '<form data-form="true">'
       + '<input type="text" data-foo="bar">'
@@ -403,10 +403,13 @@ $(function () {
       .on('valid.bs.validator', function (e) {
         ok(true)
       })
-
-    form.validator('register', 'foo', function(el){
-      return el.attr('data-foo') === 'bar'
-    })
+      .validator({
+        custom: {
+          foo: function(el) {
+            return el.attr('data-foo') === 'bar'
+          }
+        }
+      })
 
     start()
     form.validator('validate')
