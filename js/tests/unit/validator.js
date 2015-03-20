@@ -392,7 +392,7 @@ $(function () {
 
   test("should process custom validators on the custom options object", function () {
     stop()
-    var form = '<form data-form="true">'
+    var form = '<form>'
       + '<input type="text" data-foo="bar">'
       + '</form>'
 
@@ -413,6 +413,27 @@ $(function () {
 
     start()
     form.validator('validate')
+  })
 
+  test("should get error message for cutsom validator from data attribute", function () {
+    stop()
+    var form = '<form>'
+      + '<input data-foo-error="bar" data-answer="41">'
+      + '</form>'
+
+    form = $(form)
+      .on('invalid.bs.validator', function (e) {
+        ok(e.detail === 'bar', 'message retrieved')
+      })
+      .validator({
+        custom: {
+          foo: function (el) {
+            return el.attr('data-answer') == 42
+          }
+        }
+      })
+
+     start()
+     form.validator('validate')
   })
 })
